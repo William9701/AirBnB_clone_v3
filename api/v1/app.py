@@ -1,16 +1,29 @@
-from flask import Flask
+import json
+
+from flask import Flask, jsonify
 from models import storage
 from api.v1.views import app_views
 import os
 
-
 app = Flask(__name__)
 app.register_blueprint(app_views)
+
 
 @app.teardown_appcontext
 def teardown_db(exception):
     """closes the storage on teardown"""
     storage.close()
+
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    error = {"error": "Not found"}
+    output = jsonify(error)
+    output.data = json.dumps(error, indent=2) + "\n"
+    output.content_type = "application/json"
+    output.status_code = 404
+    return output
 
 
 if __name__ == "__main__":
