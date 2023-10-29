@@ -118,6 +118,3 @@ def update_state(state_id):
     output.data = json.dumps(state.to_dict(), indent=2) + '\n'
     output.content_type = "application/json"
     return output, 200
-
-
-

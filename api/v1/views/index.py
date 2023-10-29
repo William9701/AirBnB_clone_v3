@@ -14,6 +14,7 @@ def index():
     response.content_type = 'application/json'
     return response
 
+
 @app_views.route('/stats')
 def stats():
     """ Retrieving the count of objects in databse """
