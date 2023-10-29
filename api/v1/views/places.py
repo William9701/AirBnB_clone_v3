@@ -32,7 +32,7 @@ def get_places_by_city(city_id):
 @app_views.route('places/<place_id>', strict_slashes=False)
 def get_place_by_id(place_id):
     """ Retrieve a specific place from the database """
-    place = storage.get(User, place_id)
+    place = storage.get(Place, place_id)
     if place is None:
         abort(404)
     output = jsonify(place.to_dict())
