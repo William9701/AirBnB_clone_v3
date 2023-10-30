@@ -3,12 +3,14 @@
 Manipulating Place objects in database storage.
 """
 import json
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, make_response
 from api.v1.views import app_views
 from models.city import City
 from models.place import Place
+from models.state import State
 from models.user import User
 from models import storage
+from models.amenity import Amenity
 
 
 @app_views.route('cities/<city_id>/places', strict_slashes=False)
@@ -99,3 +101,38 @@ def update_place(place_id):
     output.data = json.dumps(place.to_dict(), indent=2) + '\n'
     output.content_type = 'application/json'
     return output, 200
+
+
+@app_views.route('/api/v1/places_search', methods=['POST'])
+def places_search():
+    if not request.is_json:
+        abort(400, description="Not a JSON")
+    data = request.get_json()
+    states = data.get('states', [])
+    cities = data.get('cities', [])
+    amenities = data.get('amenities', [])
+
+    if not states and not cities and not amenities:
+        places = storage.all(Place).values()
+    else:
+        places = []
+
+        for state_id in states:
+            state = storage.get(State, state_id)
+            for city in state.cities:
+                for place in city.places:
+                    if place not in places:
+                        places.append(place)
+
+        for city_id in cities:
+            city = storage.get(City, city_id)
+            for place in city.places:
+                if place not in places:
+                    places.append(place)
+
+    if amenities:
+        places = [place for place in places if all(
+            Amenity.id in [a.id for a in place.amenities] for amenity_id in
+            amenities)]
+
+    return make_response(jsonify([place.to_dict() for place in places]), 200)
