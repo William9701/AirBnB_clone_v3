@@ -58,11 +58,11 @@ def create_amenities():
     from models.amenity import Amenity
 
     if not request.get_json():
-        abort(404, 'Not a JSON')
+        abort(404, description='Not a JSON')
 
     body = request.get_json()
     if 'name' not in body:
-        abort(400, 'Missing name')
+        abort(400, description='Missing name')
 
     amenity = Amenity(**body)
     amenity.save()

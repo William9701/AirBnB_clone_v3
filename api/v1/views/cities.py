@@ -87,11 +87,11 @@ def create_city(state_id):
         abort(404)
 
     if not request.get_json():
-        abort(404, 'Not a JSON')
+        abort(404, description='Not a JSON')
 
     body = request.get_json()
     if 'name' not in body:
-        abort(400, 'Missing name')
+        abort(400, description='Missing name')
 
     city = City(**body)
     city.state_id = state_id
