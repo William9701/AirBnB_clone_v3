@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ This is a palce_amenities api module"""
 import json
-from flask import jsonify, abort, request
+from flask import jsonify, abort
 
 import models
 from api.v1.views import app_views
