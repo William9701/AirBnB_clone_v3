@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+""" This is a setup module"""
 import json
 
 from flask import jsonify
