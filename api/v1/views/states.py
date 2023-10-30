@@ -113,7 +113,7 @@ def update_state(state_id):
     for key, value in data.items():
         if key not in dont_update:
             setattr(state, key, value)
-    storage.save()
+    state.save()
     output = jsonify(state.to_dict())
     output.data = json.dumps(state.to_dict(), indent=2) + '\n'
     output.content_type = "application/json"
