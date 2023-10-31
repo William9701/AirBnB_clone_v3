@@ -58,7 +58,7 @@ def create_amenities():
     from models.amenity import Amenity
 
     if not request.get_json():
-        abort(404, description='Not a JSON')
+        abort(400, description='Not a JSON')
 
     body = request.get_json()
     if 'name' not in body:
@@ -82,7 +82,7 @@ def update_amenity(amenity_id):
     if not amenity:
         abort(404)
     if not request.get_json():
-        abort(404, 'Not a JSON')
+        abort(400, 'Not a JSON')
     data = request.get_json()
     dont_update = ['id', 'created_at', 'updated_at']
     for key, value in data.items():
