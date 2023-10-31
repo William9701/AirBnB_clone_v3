@@ -43,8 +43,8 @@ def get_review_by_id(review_id):
 
 @app_views.route('reviews/<review_id>', methods=['DELETE'],
                  strict_slashes=False)
-def delete_review(review):
-    """ Deletes a reviewe from the database if found """
+def delete_review(review_id):
+    """ Deletes a review from the database if found """
     review = storage.get(Review, review_id)
     if review is None:
         abort(404)
