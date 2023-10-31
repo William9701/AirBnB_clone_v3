@@ -26,11 +26,7 @@ def get_user_by_id(user_id):
     """ Retrieve a specific user from the database """
     user = storage.get(User, user_id)
     if user is None:
-        error = {"error": "Not found"}
-        output = jsonify(error)
-        output.data = json.dumps(error, indent=2) + '\n'
-        output.content_type = 'application/json'
-        return output
+        abort(404)
     output = jsonify(user.to_dict())
     output.data = json.dumps(user.to_dict(), indent=2) + '\n'
     output.content_type = 'application/json'
