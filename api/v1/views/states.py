@@ -28,11 +28,7 @@ def get_state_by_id(state_id):
     from models.state import State
     state = storage.get(State, state_id)
     if state is None:
-        error = {"error": "Not found"}
-        output = jsonify(error)
-        output.data = json.dumps(error, indent=2) + '\n'
-        output.content_type = 'application/json'
-        return output
+        abort(404)
     output = jsonify(state.to_dict())
     output.data = json.dumps(state.to_dict(), indent=2) + '\n'
     output.content_type = 'application/json'
@@ -50,27 +46,6 @@ def delete_state(state_id):
     from models.review import Review
     state = storage.get(State, state_id)
     if state:
-        # Get all City objects related to this State
-        cities = storage.all(City).values()
-        # Delete all City objects related to this State
-        for city in cities:
-            if city.state_id == state_id:
-                # Get all Place objects related to this City
-                places = storage.all(Place).values()
-                # Delete all Place objects related to this City
-                for place in places:
-                    if place.city_id == city.id:
-                        # Get all Review objects related to this Place
-                        reviews = storage.all(Review).values()
-                        # Delete all Review objects related to this Place
-                        for review in reviews:
-                            if review.place_id == place.id:
-                                storage.delete(review)
-                        # Now we can safely delete the Place
-                        storage.delete(place)
-                # Now we can safely delete the City
-                storage.delete(city)
-        # Now we can safely delete the State
         storage.delete(state)
         storage.save()
         return jsonify({}), 200
