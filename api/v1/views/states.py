@@ -84,11 +84,11 @@ def create_state():
     from models.state import State
 
     if not request.get_json():
-        abort(404, 'Not a JSON')
+        abort(400, description='Not a JSON')
 
     body = request.get_json()
     if 'name' not in body:
-        abort(400, 'Missing name')
+        abort(400, description='Missing name')
 
     state = State(**body)
     state.save()
@@ -107,7 +107,7 @@ def update_state(state_id):
     if not state:
         abort(404)
     if not request.get_json():
-        abort(404, description='Not a JSON')
+        abort(400, description='Not a JSON')
     data = request.get_json()
     dont_update = ['id', 'created_at', 'updated_at']
     for key, value in data.items():
